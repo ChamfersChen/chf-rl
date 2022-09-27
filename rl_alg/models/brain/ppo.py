@@ -24,13 +24,13 @@ class PPOPolicy(Policy):
         
         # define buffer to store data
         self.buffer = RolloutBuffer(self.buffer_size,state_dim,action_dim,device=self.device)
+        # define policy network
         self.policy = ActorCriticNet(state_dim, action_dim, self.action_std)
         self.policy_old = ActorCriticNet(state_dim, action_dim, self.action_std)
-
         self.policy_old.load_state_dict(self.policy.state_dict())
-
+        # optimizer
         self.optimizer = torch.optim.Adam(self.policy.parameters(), lr=self.lr, betas=self.betas)
-
+        # loss function
         self.MseLoss = nn.MSELoss()
 
     def select_action(self, state):
