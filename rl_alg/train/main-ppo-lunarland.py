@@ -9,21 +9,23 @@ def main():
     # get parameters from config
     config = toml.load(".\config\ppo-config.toml")["config"]
 
-    print(config)
-    env_name = config["env_name"]
-    #############################################
-
     # creating environment
+    env_name = config["env_name"]
     env = gym.make(env_name)
-    state_space = env.observation_space # or env.observation_space.n
-    action_space = env.action_space # or env.action_space.n
+    
+    # get space for build policy
+    state_space = env.observation_space
+    action_space = env.action_space  
+    # create policy
     ppo = PPOPolicy(state_space, action_space,config)
 
     # define logger
     writer = LogWriter(log_path="./ppo_log/",env_name=env_name,alg_name="ppo")
     writer.open_writer()
-    # train 
+    
+    # define trainer 
     runner = LunarLandRunner(config,ppo,env)
+    # do run
     runner.running(writer)
     
     writer.close_writer()

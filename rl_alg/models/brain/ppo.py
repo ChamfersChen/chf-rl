@@ -22,7 +22,7 @@ class PPOPolicy(Policy):
         action_dim = action_space.shape[0] or action_space.n
         state_dim = state_space.shape[0]
         
-
+        # define buffer to store data
         self.buffer = RolloutBuffer(self.buffer_size,state_dim,action_dim,device=self.device)
         self.policy = ActorCriticNet(state_dim, action_dim, self.action_std)
         self.policy_old = ActorCriticNet(state_dim, action_dim, self.action_std)
@@ -48,7 +48,6 @@ class PPOPolicy(Policy):
                 discounted_reward = 0
             discounted_reward = reward + (self.gamma * discounted_reward)
             rewards[-(i+1)]= discounted_reward
-
         # Normalizing the rewards:
         rewards = torch.tensor(rewards, dtype=torch.float32)
         rewards = (rewards - rewards.mean()) / (rewards.std() + 1e-5)
