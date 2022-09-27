@@ -6,9 +6,9 @@ import toml
 
 
 def main():
-    # parameters
+    # get parameters from config
     config = toml.load(".\config\ppo-config.toml")["config"]
-    
+
     print(config)
     env_name = config["env_name"]
     #############################################
